@@ -140,30 +140,86 @@ class RBTree:
             u.p.left = v
         else:
             u.p.right = v
-        if not v.isNil():
-            v.p = u.p
-    
-    """Deletes node z from the tree"""
-    def delete(self, z):
-        if z.left.isNil():
-            self.transplant(z, z.right)
-        elif z.right.isNil():
-            self.transplant(z, z.left)
-        else:
-            y = z.right.min()
-            if y != z.right:
-                self.transplant(y, y.right)
-                y.right = z.right
-                y.right.p = y
-            self.transplant(z, y)
-            y.left = z.left
-            y.left.p = y
+        v.p = u.p
 
     """Finds a node with the given value and deletes it from the tree"""
     def delete_value(self, value):
         node = self.search(value)
         if node:
             self.delete(node)
+    
+    """Deletes node z from the tree, then performs the fixes to maintain the red black properties"""
+    def delete(self, z):
+        y = z
+        y_original_color = y.color
+        if z.left.isNil():
+            x = z.right
+            self.transplant(z, z.right)
+        elif z.right.isNil():
+            x = z.left
+            self.transplant(z, z.left)
+        else:
+            y = z.right.min()
+            y_original_color = y.color
+            x = y.right
+            if y != z.right:
+                self.transplant(y, y.right)
+                y.right = z.right
+                y.right.p = y
+            else:
+                x.p = y
+            self.transplant(z, y)
+            y.left = z.left
+            y.left.p = y
+            y.color = z.color
+        if y_original_color == Color.BLACK:
+            self.delete_fixup(x)
+
+    def delete_fixup(self, x):
+        while x != self.root and x.color == Color.BLACK:
+            if x == x.p.left:
+                w = x.p.right
+                if w.color == Color.RED:
+                    w.color = Color.BLACK
+                    x.p.color = Color.RED
+                    self.rotate_left(x.p)
+                    w = x.p.right
+                if w.left.color == Color.BLACK and w.right.color == Color.BLACK:
+                    w.color = Color.RED
+                    x = x.p
+                else:
+                    if w.right.color == Color.BLACK:
+                        w.left.color = Color.BLACK
+                        w.color = Color.RED
+                        self.rotate_right(w)
+                        w = x.p.right
+                    w.color = x.p.color
+                    x.p.color = Color.BLACK
+                    w.right.color = Color.BLACK
+                    self.rotate_left(x.p)
+                    x = self.root
+            else:
+                w = x.p.left
+                if w.color == Color.RED:
+                    w.color = Color.BLACK
+                    x.p.color = Color.RED
+                    self.rotate_right(x.p)
+                    w = x.p.left
+                if w.right.color == Color.BLACK and w.left.color == Color.BLACK:
+                    w.color = Color.RED
+                    x = x.p
+                else:
+                    if w.left.color == Color.BLACK:
+                        w.right.color = Color.BLACK
+                        w.color = Color.RED
+                        self.rotate_left(w)
+                        w = x.p.left
+                    w.color = x.p.color
+                    x.p.color = Color.BLACK
+                    w.left.color = Color.BLACK
+                    self.rotate_right(x.p)
+                    x = self.root
+        x.color = Color.BLACK
     
     """Performs the ROTATE-LEFT operation at node x"""
     def rotate_left(self, x):
