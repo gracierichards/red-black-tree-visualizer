@@ -20,6 +20,6 @@ The user can then specify one of seven commands through the command line interfa
 
 ```quit``` Exits the program.
 
-A diagram of the current tree is stored in current_tree.png, and it is updated whenever changes are made to the tree.
+A diagram of the current tree is stored in current_tree.png, and it is updated after the completion of each insertion or deletion.
 
 The height of the tree is printed after each operation.
