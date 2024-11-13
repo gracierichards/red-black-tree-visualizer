@@ -62,12 +62,10 @@ class Node:
             return self
         elif value < self.value:
             if self.left.isNil():
-                print("Node not found.")
                 return None
             return self.left.search(value)
         else:
             if self.right.isNil():
-                print("Node not found.")
                 return None
             return self.right.search(value)
         
