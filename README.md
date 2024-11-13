@@ -10,7 +10,7 @@ The user can then specify one of seven commands through the command line interfa
 
 ```delete [value]``` Finds the node with the given value in the tree and deletes it.
 
-```search [value]``` Finds the node with the given value in the tree.
+```search [value]``` Prints whether the value is present in the tree.
 
 ```sort``` Prints a list of all the values in the tree in sorted order by performing an inorder traversal of the tree.
 
@@ -18,8 +18,12 @@ The user can then specify one of seven commands through the command line interfa
 
 ```max``` Prints the maximum value in the tree.
 
+```successor [value]``` Prints the smallest value that is greater than the given value in the tree.
+
+```predecessor [value]``` Prints the largest value that is less than the given value in the tree.
+
 ```quit``` Exits the program.
 
 A diagram of the current tree is stored in current_tree.png, and it is updated after the completion of each insertion or deletion.
 
-The height of the tree is printed after each operation.
+The height of the tree is printed after each operation. Leaf nodes are shown as nodes containing "nil".
